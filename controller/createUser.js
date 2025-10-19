@@ -1,5 +1,6 @@
 const User = require("../model/userSchema");
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const {generateJWT} = require("../utills/generateToken");
 
 async function createuser(req, res) {
    let { name, email, pass } = req.body;
@@ -36,11 +37,20 @@ async function createuser(req, res) {
     const hashedPassword = await bcrypt.hash(pass , 10)
     // console.log(passwordHashing);
 
-    const newUser = await User.create({ name, email, password: hashedPassword  });
+    const newUser = await User.create({ name, email, password: hashedPassword  })
+
+    let Token = await generateJWT({email : newUser.name , id : newUser._id})
+
+
     return res.status(200).json({
       success: true,
       message: "User created",
-      newUser,
+      user : {
+        name : newUser.name,
+        email :  newUser.email,
+        blog : newUser.Blogs
+      },
+      Token,
     });
   } catch (error) {
     return res.status(500).json({
@@ -93,11 +103,19 @@ async function login(req , res) {
       })
     }
 
+    let Token = await generateJWT({email : checkForExistingUSer.name , id : checkForExistingUSer._id})
+
 
     return res.status(200).json({
       success: true,
       message: "Logged in successfully",
-      checkForExistingUSer
+      user : {
+        id : checkForExistingUSer._id,
+        name : checkForExistingUSer.name,
+        email :  checkForExistingUSer.email,
+        blog : checkForExistingUSer.Blogs
+      },
+      Token,
     });
   } catch (error) {
     return res.status(500).json({
