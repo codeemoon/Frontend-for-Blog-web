@@ -14,6 +14,10 @@ const blogSchema = new moongoose.Schema({
     type: Boolean,
     default: false, //for private it become true
   },
+  creator : {
+    type : moongoose.Schema.Types.ObjectId,
+    ref : "User",
+  }
   
    }, 
     {timestamps : true}

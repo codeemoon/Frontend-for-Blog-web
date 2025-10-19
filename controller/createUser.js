@@ -1,7 +1,8 @@
 const User = require("../model/userSchema");
+const bcrypt = require('bcrypt')
 
 async function createuser(req, res) {
-  let { name, email, pass } = req.body;
+   let { name, email, pass } = req.body;
 
   try {
     if (!name) {
@@ -32,7 +33,10 @@ async function createuser(req, res) {
       });
     }
 
-    const newUser = await User.create({ name, email, password: pass });
+    const hashedPassword = await bcrypt.hash(pass , 10)
+    // console.log(passwordHashing);
+
+    const newUser = await User.create({ name, email, password: hashedPassword  });
     return res.status(200).json({
       success: true,
       message: "User created",
@@ -45,6 +49,66 @@ async function createuser(req, res) {
       err: error.message,
     });
   }
+
+}
+
+// ------------------login----------------------
+
+
+
+async function login(req , res) {
+
+  let { email, pass } = req.body;
+
+  try {
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter email",
+      });
+    }
+    if (!pass) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter password",
+      });
+    }
+
+    const checkForExistingUSer = await User.findOne({ email });
+    if (!checkForExistingUSer) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email",
+      });
+    }
+
+
+    let checkForpassword = await bcrypt.compare(pass , checkForExistingUSer.password)
+    
+
+    if(!checkForpassword){
+     return res.status(400).json({
+        success : false,
+        message : "Password not matched"
+      })
+    }
+
+
+    return res.status(200).json({
+      success: true,
+      message: "Logged in successfully",
+      checkForExistingUSer
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Try again",
+      err: error.message,
+    });
+  }
+
+ 
+  
 }
 
 // -----------------------getuser----------------
@@ -155,4 +219,5 @@ module.exports = {
   checkUserById,
   userUpdation,
   userDeletion,
+  login,
 };

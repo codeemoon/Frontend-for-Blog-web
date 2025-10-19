@@ -7,8 +7,14 @@ let userSchema = new mongoose.Schema({
     unique: true,
   },
   password: String,
+  Blogs : [
+    {
+      type : mongoose.Schema.Types.ObjectId,
+      ref : "Blog"
+    }
+  ]
 });
 
-let User = mongoose.model("user", userSchema);
+let User = mongoose.model("User", userSchema);
 
 module.exports = User;

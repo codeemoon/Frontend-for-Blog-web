@@ -1,7 +1,8 @@
 const Blog = require("../model/blogSchema");
+const User = require("../model/userSchema");
 
 async function createBlog(req, res) {
-  const { title, description, draft } = req.body;
+  const { title, description, draft , creator } = req.body;
   try {
     if (!title) {
       return res.status(400).json({
@@ -15,11 +16,27 @@ async function createBlog(req, res) {
         message: "Description reqired",
       });
     }
-    let registerBlog = await Blog.create({ title, description, draft });
+
+    let findUser = await User.findById(creator)
+    
+    if(!findUser){
+     return res.status(404).json({
+        success : fail,
+        message : "Inavild User",
+      })
+    }
+     
+   
+
+    let blogPosted = await Blog.create({ title, description, draft , creator });
+
+     await User.findByIdAndUpdate(creator , {$push : {Blogs : blogPosted.
+      _id}})
+
     return res.status(200).json({
       success: true,
       message: "Blog posted",
-      registerBlog,
+      blogPosted,
     });
   } catch (error) {
     return res.status(404).json({
@@ -32,7 +49,10 @@ async function createBlog(req, res) {
 
 async function getBlogs(req, res) {
   try {
-    let blogs = await Blog.find({draft:false});
+    let blogs = await Blog.find({draft:false}).populate({
+      path : "creator",
+      select : "-password"  
+    });
     return res.status(200).json({
       success: true,
       message: "Blogs",
