@@ -3,11 +3,12 @@
 
 const express = require('express');
 const { createBlog, getBlogs, getBlog, updateBlog, deleteBlog } = require('../controller/createBlogs');
+const verifyUser = require('../middlewares/auth');
 
 let route = express.Router()
 
 
-route.post("/blog",createBlog)
+route.post("/blog", verifyUser ,createBlog)
 
 route.get("/blog", getBlogs)
 

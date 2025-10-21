@@ -7,8 +7,8 @@ return Token;
 }
 async function  verifyJWT (token){
     try {
-        let isValid = await JWT.verify(token , "JWTkamostimportantthinginworld" )
-        return true;
+        let data = await JWT.verify(token , "JWTkamostimportantthinginworld" )
+        return data;
     } catch (error) {
         return false
        
