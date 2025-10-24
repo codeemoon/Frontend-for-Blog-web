@@ -89,15 +89,44 @@ async function getBlog( req , res) {
   }
 }
 async function updateBlog(req , res ) {
-    const {id} = req.params;
-    const {title , description} = req.body
+    const creator = req.user
+    const {id} = req.params
+    const {title , description , draft} = req.body
     try {
-        let blog  = await Blog.findByIdAndUpdate(id , {title , description}, {new :true})
+      if(!title && !description && !draft){
+       return res.status(400).json({
+          success : false,
+          message : "Can't update with all the field blank"
+        })
+      }
+
+      let findblog = await User.findById(creator).select("-password")
+      // console.log(findblog.Blogs.find(blogId => blogId == id));
+
+      const blog = await Blog.findById(id)
+      if(!(creator == blog.creator)){
+        return res.status(400).json({
+          success : false,
+          message : "Unauthorized for this action"
+        })
+      }
+      
+         
+
+      //  const updatedBlog = await Blog.updateOne( {_id : id} , {title , description , draft}, {new :true})
+
+          blog.title = title || blog.title
+           blog.description = description || blog.description
+           blog.draft = draft || blog.draft
+
+           await blog.save()
+
         return res.status(200).json({
             success : true , 
             message : "Blog Updated",
-            blog
+            blog         
         })
+
     } catch (error) {
         return res.status(400).json({
             success : false ,

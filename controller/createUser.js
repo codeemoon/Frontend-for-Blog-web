@@ -69,7 +69,7 @@ async function createuser(req, res) {
 
 async function login(req , res) {
 
-  let { email, pass } = req.body;
+  let { email, password } = req.body;
 
   try {
     if (!email) {
@@ -94,7 +94,7 @@ async function login(req , res) {
     }
 
 
-    let checkForpassword = await bcrypt.compare(pass , checkForExistingUSer.password)
+    let checkForpassword = await bcrypt.compare(password , checkForExistingUSer.password)
     
 
     if(!checkForpassword){

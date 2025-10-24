@@ -14,7 +14,7 @@ route.get("/blog", getBlogs)
 
 route.get("/blog/:id",getBlog)
 
-route.patch("/blog/:id",updateBlog)
+route.patch("/blog/:id", verifyUser , updateBlog)
 
 route.delete("/blog/:id", deleteBlog)
 
