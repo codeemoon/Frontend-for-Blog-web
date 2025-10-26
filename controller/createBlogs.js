@@ -54,10 +54,15 @@ async function createBlog(req, res) {
 
 async function getBlogs(req, res) {
   try {
-    let blogs = await Blog.find({draft:false}).populate({
+    let blogs = await Blog.find({draft:false})
+    .populate({
       path : "creator",
       select : "-password"  
-    });
+    })
+    .populate({
+      path : "likes",
+      select : "name email"
+    })
     return res.status(200).json({
       success: true,
       message: "Blogs",
@@ -178,4 +183,43 @@ async function deleteBlog(req , res) {
     }
 }
 
-module.exports = { createBlog, getBlogs, getBlog, updateBlog, deleteBlog };
+async function likeBlog (req , res) {
+  const creator = req.user
+  const {id} = req.params
+
+  try {
+        const findblog = await Blog.findById(id)
+        if(findblog==null){
+          return res.status(400).json({
+          success : false,
+          message : "No blogs found"
+        })
+      }
+
+      if(!findblog.likes.includes(creator)){
+        await Blog.findByIdAndUpdate(id , {$push : {likes : creator}})
+       return res.status(200).json({
+          success : true,
+          message : "Blog liked "
+        })
+      }else{
+        await Blog.findByIdAndUpdate(id , {$pull : {likes : creator}})
+       return res.status(200).json({
+          success : true,
+          message : "Blog disliked"
+        })
+      }
+
+  } catch (error) {
+     return res.status(500).json({
+      success : false,
+       message : "ERoor Found",
+       err : error.message
+    })
+    
+  }
+
+
+}
+
+module.exports = { createBlog, getBlogs, getBlog, updateBlog, deleteBlog , likeBlog};

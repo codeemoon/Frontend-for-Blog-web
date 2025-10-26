@@ -2,7 +2,7 @@
 
 
 const express = require('express');
-const { createBlog, getBlogs, getBlog, updateBlog, deleteBlog } = require('../controller/createBlogs');
+const { createBlog, getBlogs, getBlog, updateBlog, deleteBlog , likeBlog } = require('../controller/createBlogs');
 const verifyUser = require('../middlewares/auth');
 
 let route = express.Router()
@@ -17,5 +17,7 @@ route.get("/blog/:id",getBlog)
 route.patch("/blog/:id", verifyUser , updateBlog)
 
 route.delete("/blog/:id", verifyUser , deleteBlog)
+
+route.post('/blog/like/:id' , verifyUser , likeBlog)
 
 module.exports = route

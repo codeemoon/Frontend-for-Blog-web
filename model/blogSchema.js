@@ -17,7 +17,13 @@ const blogSchema = new moongoose.Schema({
   creator : {
     type : moongoose.Schema.Types.ObjectId,
     ref : "User",
-  }
+  },
+  likes : [
+    {
+      type : moongoose.Schema.Types.ObjectId,
+      ref : "User"
+    }
+  ]
   
    }, 
     {timestamps : true}
