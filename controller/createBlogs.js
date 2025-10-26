@@ -88,6 +88,7 @@ async function getBlog( req , res) {
     })
   }
 }
+
 async function updateBlog(req , res ) {
     const creator = req.user
     const {id} = req.params
@@ -136,13 +137,37 @@ async function updateBlog(req , res ) {
     }
 }
 async function deleteBlog(req , res) {
+    
+    const creator = req.user
     const {id} = req.params;
+    console.log(id);
     try {
-        blogToDelete = await Blog.findByIdAndDelete(id)
-        return res.status(200).json({
-            success : true, 
-            message : "Delete successfully",
+
+       const findblog = await Blog.findById(id)
+        if(findblog==null){
+          return res.status(400).json({
+          success : false,
+          message : "No blogs found"
         })
+      }
+
+       if((findblog.creator != creator)){
+        return res.status(400).json({
+          success : false,
+          message : "You are not authorized for this action"
+         })
+       }
+
+
+       
+       const blogToDelete = await Blog.findByIdAndDelete(id)
+       await User.findByIdAndUpdate(creator , {$pull : {Blogs : id}})
+       console.log(blogToDelete);
+       return res.status(200).json({
+        success : true,
+        message : "Deleted successfully"
+       })
+       
     } catch (error) {
         return res.status(404).json({
             success :false,

@@ -39,7 +39,7 @@ async function createuser(req, res) {
 
     const newUser = await User.create({ name, email, password: hashedPassword  })
 
-    let Token = await generateJWT({email : newUser.name , id : newUser._id})
+    // let Token = await generateJWT({email : newUser.name , id : newUser._id})
 
 
     return res.status(200).json({
@@ -49,7 +49,7 @@ async function createuser(req, res) {
         name : newUser.name,
         email :  newUser.email,
         blog : newUser.Blogs,
-        Token,
+        // Token,
       }
       
     });
@@ -78,7 +78,7 @@ async function login(req , res) {
         message: "Please enter email",
       });
     }
-    if (!pass) {
+    if (!password) {
       return res.status(400).json({
         success: false,
         message: "Please enter password",
