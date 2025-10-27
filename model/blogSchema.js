@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const moongoose = require("mongoose");
 
 const blogSchema = new moongoose.Schema({
@@ -22,6 +23,12 @@ const blogSchema = new moongoose.Schema({
     {
       type : moongoose.Schema.Types.ObjectId,
       ref : "User"
+    }
+  ],
+  comments : [
+    {
+      type : mongoose.Schema.Types.ObjectId,
+      ref : "Comment"
     }
   ]
   
