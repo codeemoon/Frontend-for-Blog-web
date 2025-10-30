@@ -1,15 +1,19 @@
 const Blog = require("../model/blogSchema");
 const Comment = require("../model/commentSchema");
 const User = require("../model/userSchema");
+const deleteImage = require("../utills/deleteimage");
+const forImageUploadation = require("../utills/uploadimage");
+const fs = require('fs')
 
 
 async function createBlog(req, res) {
   
   try {
     const creator  = req.user
-
-    const { title, description, draft  } = req.body;
-
+    const { title, description, draft   } = req.body; 
+    const image = req.file
+    console.log({title , description ,draft ,image});
+    console.log(req.file.path);
     if (!title) {
       return res.status(400).json({
         success: false,
@@ -32,9 +36,12 @@ async function createBlog(req, res) {
       })
     }
      
-   
 
-    let blogPosted = await Blog.create({ title, description, draft , creator });
+    const {secure_url , public_id } = await forImageUploadation(image.path)
+    
+    fs.unlinkSync(image.path)
+
+    let blogPosted = await Blog.create({ title, description, draft , creator , image : secure_url , imageId : public_id });
 
      await User.findByIdAndUpdate(creator , {$push : {Blogs : blogPosted.
       _id}})
@@ -172,7 +179,7 @@ async function deleteBlog(req , res) {
          })
        }
 
-
+      await deleteImage(findblog.imageId)
        
        const blogToDelete = await Blog.findByIdAndDelete(id)
        await User.findByIdAndUpdate(creator , {$pull : {Blogs : id}})

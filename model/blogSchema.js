@@ -11,6 +11,14 @@ const blogSchema = new moongoose.Schema({
     type: String,
     required: true,
   },
+  image : {
+    type : String,
+    required : true,
+  },
+  imageId : {
+    type : String,
+    required : true,
+  },
   draft: {
     type: Boolean,
     default: false, //for private it become true

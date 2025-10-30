@@ -5,11 +5,12 @@ const express = require('express');
 const { createBlog, getBlogs, getBlog, updateBlog, deleteBlog , likeBlog} = require('../controller/createBlogs');
 const verifyUser = require('../middlewares/auth');
 const { commentBlog, deletecommentBlog, editcommentBlog, likecommentBlog } = require('../controller/commentController');
+const upload = require('../utills/multer');
 
 let route = express.Router()
 
 //for creating blogs 
-route.post("/blog", verifyUser ,createBlog)
+route.post("/blog", verifyUser, upload.single("image") ,createBlog)
 
 route.get("/blog", getBlogs)
 
