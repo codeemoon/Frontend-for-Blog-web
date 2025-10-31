@@ -7,7 +7,7 @@ function App() {
       <Routes>
         <Route path="/"></Route>
         <Route path="/signin" element={<AuthForm type={"signin"} />}></Route>
-        <Route path="signup" element={<AuthForm type={"signup"} />}></Route>
+        <Route path="/signup" element={<AuthForm type={"signup"} />}></Route>
         <Route path="*" element={"NOT FOUND"}></Route>
       </Routes>
     </div>

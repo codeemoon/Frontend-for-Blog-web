@@ -1,8 +1,11 @@
 import { useState } from "react";
 import {toast} from "react-hot-toast";
 import axios from "axios"
+import { Link, useNavigate } from "react-router-dom";
 
 function AuthForm({ type }) {
+  
+  const navigate = useNavigate()  
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -24,16 +27,22 @@ function AuthForm({ type }) {
         userDetails
       )
  console.log(result);
+    
+     localStorage.setItem("user" , JSON.stringify(result?.data?.user))
+     localStorage.setItem("Token" , JSON.stringify(result?.data.Token))
       
-     if(result.success == true){
-       return toast.success(result.message)
-     }else{
-        return toast.error(result.message)
+     if(result){
+       return toast.success(result.data.message)
      }
       
     } catch (error) {
-      console.log(error);
+        toast.error(error.response.data.message)
+      
     }
+  }
+
+  function handelNavi (){
+    navigate("/signin")
   }
 
   return (
@@ -88,7 +97,11 @@ function AuthForm({ type }) {
         <button className="w-full h-[50px]  text-black focus:outline-none pl-2 rounded-2xl cursor-pointer text-2xl  hover:bg-gray-500 opacity-80 duration-200">
           {type == "signup" ? "Register" : "Login"}
         </button>
+
       </form>
+      {
+        type ==="signin" ? <Link to={"/signup"}> <p className="mt-2 hover:underline">Don't have an account</p> </Link> : <Link to={"/signin"}> <p className="mt-2 hover:underline">Already have an account</p> </Link>
+      }
     </div>
   );
 }
