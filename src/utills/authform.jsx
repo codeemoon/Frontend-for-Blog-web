@@ -1,6 +1,6 @@
 import { useState } from "react";
 import {toast} from "react-hot-toast";
-import {axios} from "axios"
+import axios from "axios"
 
 function AuthForm({ type }) {
   const [userDetails, setUserDetails] = useState({
@@ -20,7 +20,9 @@ function AuthForm({ type }) {
     //     },
     //   });
 
-      const result = await axios
+      const result = await axios.post(`http://localhost:3020/api/v1/${type}` ,
+        userDetails
+      )
  console.log(result);
       
      if(result.success == true){
