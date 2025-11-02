@@ -1,11 +1,11 @@
 import { useState } from "react";
 import {toast} from "react-hot-toast";
 import axios from "axios"
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function AuthForm({ type }) {
   
-  const navigate = useNavigate()  
+  
   const [userDetails, setUserDetails] = useState({
     name: "",
     email: "",
@@ -40,17 +40,13 @@ function AuthForm({ type }) {
       
     }
   }
-
-  function handelNavi (){
-    navigate("/signin")
-  }
-
   return (
-    <div className="w-[20%]  flex flex-col items-center ">
-      <h1 className="text-3xl">{type == "signin" ? "Sign in" : "Sign up"}</h1>
+    
+    <div className="w-[20%]  flex flex-col items-center  mt-36">
+      <h1 className="text-3xl ">{type == "signin" ? "Sign in" : "Sign up"}</h1>
       <br />
       <form
-        className="w-full  flex flex-col items-center"
+        className="w-full  flex flex-col items-center "
         onSubmit={handelAuthForm}
       >
         {type == "signup" ? (
