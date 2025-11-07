@@ -1,7 +1,8 @@
 import { Route, Routes } from "react-router-dom";
-import AuthForm from "./authform";
 import Navbar from "../component/navbar";
 import Homepage from "../component/homepage";
+import AuthForm from "../pages/authform";
+import AddBlogPage from "../pages/addblogpage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Route path="/" element={<Homepage/>}></Route>
         <Route path="/signin" element={<AuthForm type={"signin"} />}></Route>
         <Route path="/signup" element={<AuthForm type={"signup"} />}></Route> 
+        <Route path="/add-blog" element={<AddBlogPage/>}></Route> 
         </Route>         
         <Route path="*" element={"NOT FOUND"}></Route>
       </Routes>
