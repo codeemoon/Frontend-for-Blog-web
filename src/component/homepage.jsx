@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 function Homepage() {
 
@@ -22,6 +23,7 @@ console.log(gettingBlogs);
     <div className='w-[70%]'>
       {
        gettingBlogs.map(data=>(
+        <Link to={"blog/" + data._id}> 
           <div key={data._id} className='w-full my-10 border flex justify-between'> 
         <div className='w-[60%] flex flex-col gap-2'>
             <div >                
@@ -42,6 +44,7 @@ console.log(gettingBlogs);
             <img src={data.image} alt="" />
         </div>
       </div>
+      </Link>
        ))
     }
 

@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useState } from "react";
-import { useEffect } from "react";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -27,12 +26,12 @@ function AddBlogPage() {
       formData.append("title", blogData.title);
       formData.append("description", blogData.description);
       formData.append("image", blogData.image[0])
-    // const response = await axios.post( `http://localhost:3020/api/v1/blog`, formData, 
-    //   {headers : {
-    //     "Content-Type" : "multipart/form-data",
-    //     Authorization: `Bearer ${token}`
-    //   }}
-    // )
+    const response = await axios.post( `http://localhost:3020/api/v1/blog`, formData, 
+      {headers : {
+        "Content-Type" : "multipart/form-data",
+        Authorization: `Bearer ${token}`
+      }}
+    )
     console.log(response);
     toast.success(response.data.message)
     navigate("/")
